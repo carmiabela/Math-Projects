@@ -1,0 +1,68 @@
+def dimensions():
+  dim1 = input("What's the dimension for the first array? (e.g. 2x3) mxn ")
+  dim2 = input("What's the dimension for the second array? (e.g. 2x3) mxn ")
+  m1, n1 = dim1.split("x")
+  m2, n2 = dim2.split("x")
+  m1 = int(m1)
+  n1 = int(n1)
+  m2 = int(m2)
+  n2 = int(n2)
+  return m1, n1, m2, n2
+m1, n1, m2, n2 = dimensions()
+
+matrix_1 = [[0 for _ in range(m1)] for _ in range(n1)]
+matrix_2 = [[0 for _ in range(m2)] for _ in range(n2)]
+matrix_product = [[0 for _ in range(m1)] for _ in range(n1)]
+
+def matrices():
+  for i in range(n1):
+      for j in range(m1):
+          print(matrix_1)
+          matrix_1[i][j] = int(input("Enter matrix 1 value"))
+  for m in range(n2):
+      for n in range(m2):
+          print(matrix_2)
+          matrix_2[m][n] = int(input("Enter matrix 2 value"))
+  print("Matrix 1:", matrix_1, "Matrix 2:", matrix_2)
+  return matrix_1, matrix_2
+matrix_1, matrix_2 = matrices()
+
+def matrix_addition():
+  for i in range(n1):
+    for j in range(m1):
+      matrix_product[i][j] = matrix_1[i][j] + matrix_2[i][j]
+  print("Addition of matrices:", matrix_product)
+
+def matrix_subtraction():
+  for i in range(n1):
+    for j in range(m1):
+      matrix_product[i][j] = matrix_1[i][j] - matrix_2[i][j]
+  print("Subtraction of matrices:", matrix_product)
+
+
+def matrix_multiplication():
+  if m1 != n2:
+      print("cant do multiplication with those dimensions")
+      return
+  for i in range(n1):
+      for j in range(m2):
+          for k in range(m1):
+            matrix_product[i][j] += matrix_1[i][k] * matrix_2[k][j]
+  print("multiplication of matrices:", matrix_product)
+
+while True:
+  a = input("do u want to subtract(s), add(a), multiply(m), restart(r) or end(e)? ")
+  if a == "s" and m1 == m2 and n1 == n2:
+    matrix_subtraction()
+  elif a == "a" and m1 == m2 and n1 == n2:
+    matrix_addition()
+  elif a == "m":
+    matrix_multiplication()
+  elif a == 'r':
+    dimensions()
+    matrices()
+  elif a == 'e':
+    print("thanks!")
+    break
+  else:
+    print("Invalid input or maybe your matrices dimension don't work for this function")

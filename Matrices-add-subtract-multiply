@@ -1,31 +1,34 @@
 def dimensions():
   dim1 = input("What's the dimension for the first array? (e.g. 2x3) mxn ")
-  dim2 = input("What's the dimension for the second array? (e.g. 2x3) mxn ")
-  m1, n1 = dim1.split("x")
-  m2, n2 = dim2.split("x")
-  m1 = int(m1)
-  n1 = int(n1)
-  m2 = int(m2)
-  n2 = int(n2)
+  dim2 = input("What's the dimension for the second array? (e.g. 3x2) nxm ")
+  m1, n1 = map(int, dim1.split("x"))
+  m2, n2 = map(int, dim2.split("x"))
   return m1, n1, m2, n2
 m1, n1, m2, n2 = dimensions()
 
-matrix_1 = [[0 for _ in range(m1)] for _ in range(n1)]
-matrix_2 = [[0 for _ in range(m2)] for _ in range(n2)]
-matrix_product = [[0 for _ in range(m1)] for _ in range(n1)]
+matrix_1 = [[0 for _ in range(n1)] for _ in range(m1)]
+matrix_2 = [[0 for _ in range(n2)] for _ in range(m2)]
+matrix_product = [[0 for _ in range(n2)] for _ in range(m1)]
 
 def matrices():
-  for i in range(n1):
-      for j in range(m1):
-          print(matrix_1)
-          matrix_1[i][j] = int(input("Enter matrix 1 value"))
-  for m in range(n2):
-      for n in range(m2):
-          print(matrix_2)
-          matrix_2[m][n] = int(input("Enter matrix 2 value"))
-  print("Matrix 1:", matrix_1, "Matrix 2:", matrix_2)
-  return matrix_1, matrix_2
+  for i in range(m1):
+    for j in range(n1):
+      print(matrix_1)
+      matrix_1[i][j] = int(input("Enter matrix 1 value"))
+  for m in range(m2):
+    for n in range(n2):
+      print(matrix_2)
+      matrix_2[m][n] = int(input("Enter matrix 2 value"))
+  print("Matrix 1:")
+  for i in range(m1):
+    print(matrix_1[i])
+  print("Matrix 2:")
+  for m in range(m2):
+      print(matrix_2[m])
+  return matrix_1,matrix_2
+
 matrix_1, matrix_2 = matrices()
+
 
 def matrix_addition():
   for i in range(n1):
@@ -41,28 +44,54 @@ def matrix_subtraction():
 
 
 def matrix_multiplication():
-  if m1 != n2:
-      print("cant do multiplication with those dimensions")
-      return
-  for i in range(n1):
-      for j in range(m2):
-          for k in range(m1):
-            matrix_product[i][j] += matrix_1[i][k] * matrix_2[k][j]
+  if n1 != m2:
+    print("cant do multiplication with those dimensions")
+    return
+  for i in range(m1):
+    for j in range(n2):
+        for k in range(m2):
+          matrix_product[i][j] += matrix_1[i][k] * matrix_2[k][j]
   print("multiplication of matrices:", matrix_product)
+  print("Multiplication of matrices:")
+  print("answer:")
+  for m in range(m1):
+      print(matrix_product[m])
+
+def matrix_determinant(matrix,num):
+  diag1 = 1
+  diag2 = 1
+  for i in range(num):
+    diag1 = diag1 * matrix[i][i]
+    diag2 = diag2 * matrix[i][num-i-1]
+  det = diag1-diag2
+  print("the determinant of",matrix,"is",det)
+
 
 while True:
-  a = input("do u want to subtract(s), add(a), multiply(m), restart(r) or end(e)? ")
+  a = input('''Do you want to subtract(s), add(a), multiply(m), restart(r), 
+  determinant(d) or end(e)?''')
   if a == "s" and m1 == m2 and n1 == n2:
-    matrix_subtraction()
+      matrix_subtraction()
   elif a == "a" and m1 == m2 and n1 == n2:
-    matrix_addition()
-  elif a == "m":
-    matrix_multiplication()
+      matrix_addition()
+  elif a == "m" and n1 == m2:
+      matrix_multiplication()
   elif a == 'r':
-    dimensions()
-    matrices()
+      m1, n1, m2, n2 = dimensions()
+      matrix_1, matrix_2 = matrices()
+  elif a == 'd':
+    b = input("do you want matrix 1, 2 or both?")
+    if b == '1' and n1==m1:
+      matrix_determinant(matrix_1,m1)
+    elif b == '2' and n2==m2:
+      matrix_determinant(matrix_2,m2)
+    elif b == 'both' and n2==m2 and n1==m1:
+      matrix_determinant(matrix_1,m1)
+      matrix_determinant(matrix_2,m2)
+    else:
+      print("your input is either invalid or the dimensions dont work for this function")
   elif a == 'e':
-    print("thanks!")
-    break
+      print("Thanks!")
+      break
   else:
-    print("Invalid input or maybe your matrices dimension don't work for this function")
+      print("Invalid input or matrices' dimensions don't work for this function")

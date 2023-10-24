@@ -1,3 +1,6 @@
+import copy
+
+
 def dimensions():
   dim1 = input("What's the dimension for the first array? (e.g. 2x3) mxn ")
   dim2 = input("What's the dimension for the second array? (e.g. 3x2) nxm ")
@@ -26,6 +29,7 @@ def matrices():
   for m in range(m2):
       print(matrix_2[m])
   return matrix_1,matrix_2
+  print("")
 
 matrix_1, matrix_2 = matrices()
 
@@ -34,13 +38,19 @@ def matrix_addition():
   for i in range(n1):
     for j in range(m1):
       matrix_product[i][j] = matrix_1[i][j] + matrix_2[i][j]
-  print("Addition of matrices:", matrix_product)
+  print("Addition of matrices:")
+  for m in range(2):
+    print(matrix_product[m])
+  print("")
 
 def matrix_subtraction():
   for i in range(n1):
     for j in range(m1):
       matrix_product[i][j] = matrix_1[i][j] - matrix_2[i][j]
-  print("Subtraction of matrices:", matrix_product)
+  print("Subtraction of matrices:")
+  for m in range(2):
+    print(matrix_product[m])
+  print("")
 
 
 def matrix_multiplication():
@@ -51,11 +61,10 @@ def matrix_multiplication():
     for j in range(n2):
         for k in range(m2):
           matrix_product[i][j] += matrix_1[i][k] * matrix_2[k][j]
-  print("multiplication of matrices:", matrix_product)
-  print("Multiplication of matrices:")
-  print("answer:")
+  print("Multiplication of matrices answer:")
   for m in range(m1):
       print(matrix_product[m])
+  print("")
 
 def matrix_determinant(matrix,num):
   diag1 = 1
@@ -65,31 +74,79 @@ def matrix_determinant(matrix,num):
     diag2 = diag2 * matrix[i][num-i-1]
   det = diag1-diag2
   print("the determinant of",matrix,"is",det)
+  print("")
+
+
+def matrix_Inverse(matrix):
+  array2 = copy.deepcopy(matrix)
+
+  if len(array2[0]) != 2 or len(array2[1]) != 2:
+    print("can't find inverse of this matrix, because of dimensions")
+    return
+  # determinant
+  diag1 = 1
+  diag2 = 1
+  for i in range(2):
+    diag1 = diag1 * array2[i][i]
+    diag2 = diag2 * array2[i][2-i-1]
+  det = diag1 - diag2
+  print("determinant of", matrix, "is", det)
+  if det == 0:
+    print("this matrix has a determinant of 0 so we can't find the inverse")
+    return
+  # inverse
+  inversedet = abs(1/det)
+  array2[0][0] = inversedet * matrix[1][1]
+  array2[0][1] = inversedet * matrix[0][1] * -1
+  array2[1][0] = inversedet * matrix[-1][0] * -1
+  array2[1][1] =  inversedet * matrix[0][0]
+  print("inverse is:")
+  for m in range(2):
+    print(array2[m])
+  print("")
 
 
 while True:
-  a = input('''Do you want to subtract(s), add(a), multiply(m), restart(r), 
-  determinant(d) or end(e)?''')
+  a = input('''Do you want to subtract(s), add(a), multiply(m), determinant(d), 
+  inverse(n) restart(r), or end(e)?''')
   if a == "s" and m1 == m2 and n1 == n2:
       matrix_subtraction()
   elif a == "a" and m1 == m2 and n1 == n2:
       matrix_addition()
   elif a == "m" and n1 == m2:
       matrix_multiplication()
+#restart
   elif a == 'r':
-      m1, n1, m2, n2 = dimensions()
-      matrix_1, matrix_2 = matrices()
+    matrix_1 = [[0 for _ in range(n1)] for _ in range(m1)]
+    matrix_2 = [[0 for _ in range(n2)] for _ in range(m2)]
+    matrix_product = [[0 for _ in range(n2)] for _ in range(m1)]
+    m1, n1, m2, n2 = dimensions()
+    matrix_1, matrix_2 = matrices()
+#inverse
+  elif a == 'n':
+    b = input("do you want matrix 1, 2 or both?")
+    if b == '1' and n1==m1:
+      matrix_Inverse(matrix_1)
+    elif b == '2' and n2==m2:
+      matrix_Inverse(matrix_2)
+    elif b == 'both' and n2==m2 and n1==m1:
+      matrix_Inverse(matrix_1)
+      matrix_Inverse(matrix_2)
+#determinant
   elif a == 'd':
     b = input("do you want matrix 1, 2 or both?")
     if b == '1' and n1==m1:
       matrix_determinant(matrix_1,m1)
+
     elif b == '2' and n2==m2:
       matrix_determinant(matrix_2,m2)
+
     elif b == 'both' and n2==m2 and n1==m1:
       matrix_determinant(matrix_1,m1)
       matrix_determinant(matrix_2,m2)
+
     else:
-      print("your input is either invalid or the dimensions dont work for this function")
+      print("your inputis invalid or the dimensions dont work for this function")
   elif a == 'e':
       print("Thanks!")
       break
